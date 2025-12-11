@@ -1,14 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AllCards from "./components/AllCards"
 import {data} from "./utils/data"
 
 
 
 function App() {
+
+  // fetch('https://dummyjson.com/products').then(res => res.json()).then(result => console.log(result))
+
+  
   const [val,setVal] = useState('')
-  const [filterData,setFilterData] = useState(data)
+  const [filterData,setFilterData] = useState("")
+  const [initialData,setInitialData] = useState("")
+  
+
+
+  useEffect(()=>{
+      async function fetchProductData(){
+    let res = await fetch("https://dummyjson.com/products")
+    let json = await res.json();
+    setFilterData(json.products);
+    setInitialData(json.products);
+  }
+
+
+       fetchProductData();
+  },[]);
+
+
+  
   function filterHandler(){
-    let res = data.filter((item)=> item.title.toLowerCase().includes(val.toLowerCase()))
+    let res = initialData.filter((item)=> item.title.toLowerCase().includes(val.toLowerCase()))
     setFilterData(res)
   }
   
